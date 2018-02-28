@@ -1,7 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View, Animated, Easing } from "react-native";
 
-import { Hello, DisconnectedErr, AuthErr, OtherClientErr, CameraErr } from './Cards';
+import {
+  Hello,
+  DisconnectedErr,
+  AuthErr,
+  OtherClientErr,
+  CameraErr,
+  GeneralErr
+} from "./Cards";
 
 export default class Card extends React.Component {
   state = {
@@ -32,8 +39,26 @@ export default class Card extends React.Component {
   };
 
   chooseMessage() {
-    //if (this.props.cardType === "hello") return <Hello />;
-    return <DisconnectedErr />;
+    switch (this.props.cardType) {
+      case "hello":
+        return <Hello />;
+        break;
+      case "disconnected":
+        return <DisconnectedErr />;
+        break;
+      case "auth":
+        return <AuthErr />;
+        break;
+      case "otherClient":
+        return <OtherClientErr />;
+        break;
+      case "cameraErr":
+        return <CameraErr />;
+        break;
+      default:
+        return <GeneralErr />; 
+        break;
+    }
   }
 
   render() {
@@ -44,7 +69,7 @@ export default class Card extends React.Component {
         onLayout={this.onLayout}
         style={[styles.card, { transform: [{ translateY: cardPosition }] }]}
       >
-        { this.chooseMessage() }
+        {this.chooseMessage()}
       </Animated.View>
     );
   }

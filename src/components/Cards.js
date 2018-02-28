@@ -87,6 +87,17 @@ export const CameraErr = () => {
   );
 };
 
+export const GeneralErr = () => {
+  return (
+    <View style={styles.wrapper}>
+      <Text style={[styles.title, styles.error]}>Error. :(</Text>
+      <Text style={styles.text}>
+        Some weird error occured. Please try restarting the app.
+      </Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   wrapper: {
     margin: 20,
