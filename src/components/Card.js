@@ -13,29 +13,42 @@ import {
 export default class Card extends React.Component {
   state = {
     cardPosition: new Animated.Value(40),
-    cardHeight: 0
+    cardHeight: 0,
+    isClosed: true
   };
 
   onLayout = event => {
     const { height } = event.nativeEvent.layout;
     this.setState({ cardHeight: height });
     this.state.cardPosition.setValue(height);
-
-    Animated.spring(this.state.cardPosition, {
-      toValue: 0,
-      overshootClamping: true,
-      bounciness: 1,
-      useNativeDriver: true
-    }).start();
   };
 
-  remove = () => {
-    Animated.spring(this.state.cardPosition, {
-      toValue: this.state.cardHeight,
-      overshootClamping: true,
-      bounciness: 1,
-      useNativeDriver: true
-    }).start();
+  remove = () => {};
+
+  opener = () => {
+    if (this.props.show) {
+      if (this.state.isClosed) {
+        Animated.spring(this.state.cardPosition, {
+          toValue: 0,
+          overshootClamping: true,
+          bounciness: 1,
+          useNativeDriver: true
+        }).start();
+
+        this.state.isClosed = false;
+      }
+    } else {
+      if (!this.state.isClosed) {
+        Animated.spring(this.state.cardPosition, {
+          toValue: this.state.cardHeight,
+          overshootClamping: true,
+          bounciness: 1,
+          useNativeDriver: true
+        }).start();
+
+        this.state.isClosed = true;
+      }
+    }
   };
 
   chooseMessage() {
@@ -56,13 +69,15 @@ export default class Card extends React.Component {
         return <CameraErr />;
         break;
       default:
-        return <GeneralErr />; 
+        return <GeneralErr />;
         break;
     }
   }
 
   render() {
     let { cardPosition } = this.state;
+
+    this.opener();
 
     return (
       <Animated.View
