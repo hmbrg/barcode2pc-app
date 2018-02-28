@@ -1,31 +1,39 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Font } from "expo";
+import { Font, BarCodeScanner, Permissions } from "expo";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+
+import Card from './Card';
 
 export default class App extends React.Component {
   state = {
-    fontLoaded: false
+    fontLoaded: false,
+    hasCameraPermission: null
   };
 
   async componentDidMount() {
     await Font.loadAsync({
       "roboto-mono-medium": require("../../assets/fonts/RobotoMono/RobotoMono-Medium.ttf")
     });
-
     this.setState({ fontLoaded: true });
   }
 
   render() {
+    const { hasCameraPermission } = this.state;
+
     return (
       <View style={styles.container}>
         {this.state.fontLoaded ? (
           <View style={{flex: 1}}>
             <View style={styles.upper}>
               <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
-              <View style={styles.scanner}></View>
+              <View style={styles.scanner}>
+                
+              </View>
             </View>
-            <View style={styles.lower} />
+            <View style={styles.lower}>
+              <Card cardType="hello" />
+            </View>
           </View>
         ) : null}
       </View>
@@ -52,7 +60,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 0.5,
     color: "black",
-    marginTop: 9,
+    marginTop: 6,
     marginBottom: 0
   },
   scanner: {
