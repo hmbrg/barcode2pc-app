@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
   },
   lower: {
     flex: 2,
-    backgroundColor: "yellow"
   },
   connected: {
     fontFamily: "roboto-mono-medium",
