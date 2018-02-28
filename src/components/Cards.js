@@ -41,6 +41,9 @@ export const DisconnectedErr = () => {
         Please make sure you are in the same wifi network and the app on your
         machine is open.
       </Text>
+			<Text style={styles.text}>
+        Try again by scanning the barcode on your machine.
+      </Text>
     </View>
   );
 };
