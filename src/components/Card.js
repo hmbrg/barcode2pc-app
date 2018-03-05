@@ -49,7 +49,6 @@ export default class Card extends React.Component {
   componentDidUpdate() {
     if (this.props.show) {
       if (this.state.isClosed) {
-        alert();
         Animated.spring(this.state.cardPosition, {
           toValue: 0,
           overshootClamping: true,
