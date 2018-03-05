@@ -23,34 +23,6 @@ export default class Card extends React.Component {
     this.state.cardPosition.setValue(height);
   };
 
-  remove = () => {};
-
-  opener = () => {
-    if (this.props.show) {
-      if (this.state.isClosed) {
-        Animated.spring(this.state.cardPosition, {
-          toValue: 0,
-          overshootClamping: true,
-          bounciness: 1,
-          useNativeDriver: true
-        }).start();
-
-        this.state.isClosed = false;
-      }
-    } else {
-      if (!this.state.isClosed) {
-        Animated.spring(this.state.cardPosition, {
-          toValue: this.state.cardHeight,
-          overshootClamping: true,
-          bounciness: 1,
-          useNativeDriver: true
-        }).start();
-
-        this.state.isClosed = true;
-      }
-    }
-  };
-
   chooseMessage() {
     switch (this.props.cardType) {
       case "hello":
@@ -74,10 +46,35 @@ export default class Card extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.show) {
+      if (this.state.isClosed) {
+        alert();
+        Animated.spring(this.state.cardPosition, {
+          toValue: 0,
+          overshootClamping: true,
+          bounciness: 1,
+          useNativeDriver: true
+        }).start();
+
+        this.state.isClosed = false;
+      }
+    } else {
+      if (!this.state.isClosed) {
+        Animated.spring(this.state.cardPosition, {
+          toValue: this.state.cardHeight,
+          overshootClamping: true,
+          bounciness: 1,
+          useNativeDriver: true
+        }).start();
+
+        this.state.isClosed = true;
+      }
+    }
+  }
+
   render() {
     let { cardPosition } = this.state;
-
-    this.opener();
 
     return (
       <Animated.View
@@ -105,6 +102,7 @@ const styles = StyleSheet.create({
       height: 0
     },
     shadowOpacity: 0.2,
-    shadowRadius: 20
+    shadowRadius: 20,
+    elevation: 1,
   }
 });
