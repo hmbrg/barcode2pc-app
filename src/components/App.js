@@ -32,7 +32,7 @@ export default class App extends React.Component {
               </View>
             </View>
             <View style={styles.lower}>
-              <Card cardType="hello" />
+              <Card cardType="hello" show={true}/>
             </View>
           </View>
         ) : null}
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
       height: 0
     },
     shadowOpacity: 0.2,
-    shadowRadius: 50
+    shadowRadius: 50,
+    elevation: 1,
   }
 });
