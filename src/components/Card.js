@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Animated, Easing } from "react-native";
+import { StyleSheet, Text, View, Animated, Easing, ScrollView } from "react-native";
 
 import {
   Hello,
@@ -80,7 +80,10 @@ export default class Card extends React.Component {
         onLayout={this.onLayout}
         style={[styles.card, { transform: [{ translateY: cardPosition }] }]}
       >
-        {this.chooseMessage()}
+        <ScrollView showsVerticalScrollIndicator={false} pinchGestureEnabled={false}>  
+          {this.chooseMessage()}
+        </ScrollView>  
+
       </Animated.View>
     );
   }
