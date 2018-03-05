@@ -2,10 +2,13 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Font, BarCodeScanner, Permissions } from "expo";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+import { connect } from "react-redux";
 
-import Card from './Card';
+import { actions } from "../reducers/App";
 
-export default class App extends React.Component {
+import Card from "../components/Card";
+
+export class App extends React.Component {
   state = {
     fontLoaded: false,
     hasCameraPermission: null
@@ -24,15 +27,13 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.fontLoaded ? (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <View style={styles.upper}>
               <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
-              <View style={styles.scanner}>
-                
-              </View>
+              <View style={styles.scanner} />
             </View>
             <View style={styles.lower}>
-              <Card cardType="hello" show={true}/>
+              <Card cardType="hello" show={true} pressHello={this.props.pressHello} />
             </View>
           </View>
         ) : null}
@@ -49,10 +50,10 @@ const styles = StyleSheet.create({
   upper: {
     flex: 3,
     backgroundColor: "white",
-    alignItems: "center",
+    alignItems: "center"
   },
   lower: {
-    flex: 2,
+    flex: 2
   },
   connected: {
     fontFamily: "roboto-mono-medium",
@@ -76,6 +77,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 50,
-    elevation: 1,
+    elevation: 1
   }
 });
+
+// const mapStateToProps = (state, ownProps) => ({ repos: state.repos });
+const mapDispatchToProps = { ...actions };
+
+export default connect(null, mapDispatchToProps)(App);

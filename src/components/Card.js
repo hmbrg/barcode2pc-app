@@ -17,6 +17,8 @@ import {
   GeneralErr
 } from "./Cards";
 
+import PropTypes from "prop-types";
+
 export default class Card extends React.Component {
   state = {
     cardPosition: new Animated.Value(40),
@@ -33,7 +35,7 @@ export default class Card extends React.Component {
   chooseMessage() {
     switch (this.props.cardType) {
       case "hello":
-        return <Hello />;
+        return <Hello press={this.props.pressHello} />;
         break;
       case "disconnected":
         return <DisconnectedErr />;
@@ -97,6 +99,12 @@ export default class Card extends React.Component {
     );
   }
 }
+
+Card.propTypes = {
+  pressHello: PropTypes.func.isRequired,
+  cardType: PropTypes.string,
+  show: PropTypes.bool,
+};
 
 const styles = StyleSheet.create({
   card: {

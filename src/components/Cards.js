@@ -8,12 +8,9 @@ import {
   TouchableOpacity,
   Linking
 } from "react-native";
+import PropTypes from "prop-types";
 
-export const Hello = () => {
-  openAppDownload = () => {
-    Linking.openURL("http://google.com");
-  };
-
+export const Hello = props => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>Hello.</Text>
@@ -21,7 +18,7 @@ export const Hello = () => {
         Please open the app and scan the displayed code to connect to your
         machine to start scanning.
       </Text>
-      <TouchableOpacity onPress={this.openAppDownload}>
+      <TouchableOpacity onPress={props.press}>
         <Text style={styles.text}>
           <Text style={[styles.text]}>
             If you don’t yet have the app installed on your machine
@@ -33,6 +30,10 @@ export const Hello = () => {
   );
 };
 
+Hello.propTypes = {
+  press: PropTypes.func.isRequired
+};
+
 export const DisconnectedErr = () => {
   return (
     <View style={styles.wrapper}>
@@ -41,7 +42,7 @@ export const DisconnectedErr = () => {
         Please make sure you are in the same wifi network and the app on your
         machine is open.
       </Text>
-			<Text style={styles.text}>
+      <Text style={styles.text}>
         Try again by scanning the barcode on your machine.
       </Text>
     </View>
@@ -101,7 +102,7 @@ export const GeneralErr = () => {
 const styles = StyleSheet.create({
   wrapper: {
     margin: 20,
-    marginLeft: 35,
+    marginLeft: 35
   },
   title: {
     color: "black",
