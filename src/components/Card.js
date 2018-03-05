@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Animated, Easing, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Animated,
+  Easing,
+  ScrollView
+} from "react-native";
 
 import {
   Hello,
@@ -80,10 +87,12 @@ export default class Card extends React.Component {
         onLayout={this.onLayout}
         style={[styles.card, { transform: [{ translateY: cardPosition }] }]}
       >
-        <ScrollView showsVerticalScrollIndicator={false} pinchGestureEnabled={false}>  
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          pinchGestureEnabled={false}
+        >
           {this.chooseMessage()}
-        </ScrollView>  
-
+        </ScrollView>
       </Animated.View>
     );
   }
@@ -105,6 +114,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 20,
-    elevation: 1,
+    elevation: 1
   }
 });
