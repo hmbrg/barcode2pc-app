@@ -15,8 +15,8 @@ export default class Scanner extends React.Component {
       this.setState({ hasCameraPermission: status === "granted" });
 
       if (!this.state.hasCameraPermission) {
-				this.props.needCameraPermission();
-				console.log("Nedd CAmerdf pef");
+        this.props.needCameraPermission();
+        console.log("Nedd CAmerdf pef");
 
         var permissionTester = setInterval(async () => {
           const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -41,14 +41,11 @@ export default class Scanner extends React.Component {
   };
 
   render() {
-    const { hasCameraPermission } = this.state;
+    let { hasCameraPermission } = this.state;
 
-    //if (hasCameraPermission === null) {
-      if (true) {
-      return null;
-    } else if (hasCameraPermission === false) {
-      return null;
-    } else {
+    // Only for testing (sry...)
+    hasCameraPermission = false;
+    if (hasCameraPermission) {
       return (
         <View style={{ flex: 1 }}>
           <BarCodeScanner
@@ -57,6 +54,8 @@ export default class Scanner extends React.Component {
           />
         </View>
       );
+    } else {
+      return null;
     }
   }
 }
@@ -64,5 +63,5 @@ export default class Scanner extends React.Component {
 Scanner.propTypes = {
   needCameraPermission: PropTypes.func.isRequired,
   gotCameraPermission: PropTypes.func.isRequired,
-	barcodeType: PropTypes.string,
+  barcodeType: PropTypes.string
 };
