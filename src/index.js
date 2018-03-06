@@ -1,5 +1,3 @@
-require('react-devtools-core').connectToDevTools({host: '169.254.187.227'})
-
 import React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
