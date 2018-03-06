@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { actions } from "../reducers/App";
 
 import Card from "../components/Card";
+import Scanner from "../components/Scanner";
 
 export class App extends React.Component {
   state = {
@@ -22,18 +23,25 @@ export class App extends React.Component {
   }
 
   render() {
-    const { hasCameraPermission } = this.state;
-
     return (
       <View style={styles.container}>
         {this.state.fontLoaded ? (
           <View style={{ flex: 1 }}>
             <View style={styles.upper}>
               <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
-              <View style={styles.scanner} />
+              <View style={styles.scanner}>
+                <Scanner
+                  needCameraPermission={this.props.needCameraPermission}
+                  gotCameraPermission={this.props.gotCameraPermission}
+                />
+              </View>
             </View>
             <View style={styles.lower}>
-              <Card cardType="hello" show={true} pressHello={this.props.pressHello} />
+              <Card
+                cardType={this.props.cardType}
+                show={this.props.showInfoCard}
+                pressHello={this.props.pressHello}
+              />
             </View>
           </View>
         ) : null}
@@ -77,11 +85,15 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 50,
-    elevation: 1
+    elevation: 1,
+    overflow: "hidden"
   }
 });
 
-// const mapStateToProps = (state, ownProps) => ({ repos: state.repos });
+const mapStateToProps = (state, ownProps) => ({
+  showInfoCard: state.app.showInfoCard,
+  cardType: state.app.cardType
+});
 const mapDispatchToProps = { ...actions };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

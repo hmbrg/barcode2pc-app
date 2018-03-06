@@ -23,13 +23,13 @@ export default class Card extends React.Component {
   state = {
     cardPosition: new Animated.Value(40),
     cardHeight: 0,
-    isClosed: true
+    opacity: 0,
   };
 
   onLayout = event => {
     const { height } = event.nativeEvent.layout;
-    this.setState({ cardHeight: height });
     this.state.cardPosition.setValue(height);
+    this.setState({ cardHeight: height, opacity: 1 });
   };
 
   chooseMessage() {
@@ -57,27 +57,19 @@ export default class Card extends React.Component {
 
   componentDidUpdate() {
     if (this.props.show) {
-      if (this.state.isClosed) {
-        Animated.spring(this.state.cardPosition, {
-          toValue: 0,
-          overshootClamping: true,
-          bounciness: 1,
-          useNativeDriver: true
-        }).start();
-
-        this.state.isClosed = false;
-      }
+      Animated.spring(this.state.cardPosition, {
+        toValue: 0,
+        overshootClamping: true,
+        bounciness: 1,
+        useNativeDriver: true
+      }).start();
     } else {
-      if (!this.state.isClosed) {
-        Animated.spring(this.state.cardPosition, {
-          toValue: this.state.cardHeight,
-          overshootClamping: true,
-          bounciness: 1,
-          useNativeDriver: true
-        }).start();
-
-        this.state.isClosed = true;
-      }
+      Animated.spring(this.state.cardPosition, {
+        toValue: this.state.cardHeight,
+        overshootClamping: true,
+        bounciness: 1,
+        useNativeDriver: true
+      }).start();
     }
   }
 
@@ -87,7 +79,7 @@ export default class Card extends React.Component {
     return (
       <Animated.View
         onLayout={this.onLayout}
-        style={[styles.card, { transform: [{ translateY: cardPosition }] }]}
+        style={[styles.card, { opacity: this.state.opacity }, { transform: [{ translateY: cardPosition }] }]}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -103,7 +95,7 @@ export default class Card extends React.Component {
 Card.propTypes = {
   pressHello: PropTypes.func.isRequired,
   cardType: PropTypes.string,
-  show: PropTypes.bool,
+  show: PropTypes.bool
 };
 
 const styles = StyleSheet.create({
@@ -122,6 +114,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 20,
-    elevation: 1
+    elevation: 1,
   }
 });
