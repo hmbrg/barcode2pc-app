@@ -1,15 +1,13 @@
 import React from "react";
-import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { init } from '@rematch/core'
+import * as models from './models'
 
-import reducer from "./reducers";
 import App from "./containers/App";
 
-const middleware = [thunk];
-
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(...middleware)));
+const store = init({
+  models,
+})
 
 export default (ProviderApp = () => {
   return (

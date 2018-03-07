@@ -4,10 +4,9 @@ import { Font, BarCodeScanner, Permissions } from "expo";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { connect } from "react-redux";
 
-import { actions } from "../reducers/App";
-
 import Card from "../components/Card";
 import Scanner from "../components/Scanner";
+import Toolbar from "../components/Toolbar";
 
 export class App extends React.Component {
   state = {
@@ -37,6 +36,7 @@ export class App extends React.Component {
               </View>
             </View>
             <View style={styles.lower}>
+              <Toolbar />  
               <Card
                 cardType={this.props.cardType}
                 show={this.props.showInfoCard}
@@ -94,6 +94,10 @@ const mapStateToProps = (state, ownProps) => ({
   showInfoCard: state.app.showInfoCard,
   cardType: state.app.cardType
 });
-const mapDispatchToProps = { ...actions };
+const mapDispatchToProps = dispatch => ({
+  pressHello: () => dispatch.app.pressHello(),
+  needCameraPermission: () => dispatch.app.needCameraPermission(),
+  gotCameraPermission: () => dispatch.app.gotCameraPermission()
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
