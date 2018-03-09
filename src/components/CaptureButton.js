@@ -12,9 +12,6 @@ const UnlockButtton = ({ enabled, onPress, width }) => {
   return (
     <BaseButton
       onPress={onPress}
-      onHandlerStateChange={event => {
-        console.log(event.nativeEvent.state);
-      }}
       onActiveStateChange={value => {
         console.log("Acitve? " + value);
       }}
@@ -60,6 +57,14 @@ export default class CaptureButton extends Component {
   };
 
   onHandlerStateChange = event => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      console.log("dfsdfsdfs");
+      Animated.spring(this.buttonPopper, {
+        toValue: 100,
+
+      }).start();
+    }
+
     if (event.nativeEvent.oldState === State.ACTIVE) {
       if (event.nativeEvent.translationX >= this.state.dimensions.width / 2) {
         this.lockButton();
@@ -86,11 +91,17 @@ export default class CaptureButton extends Component {
     const offset = btnWidth / 2;
     this.translateX = new Animated.Value(0);
     this.opacityLayer2 = new Animated.Value(0);
+    this.buttonPopper = new Animated.Value(0);
 
     this.onGestureEvent = Animated.event(
       [{ nativeEvent: { translationX: this.translateX } }],
       { useNativeDriver }
     );
+
+    this.buttonPop = this.buttonPopper.interpolate({
+      inputRange: [0, 50, 100],
+      outputRange: [1, 1.2, 1],
+    });
 
     this.dragX = this.translateX.interpolate({
       inputRange: [0, offset],
@@ -138,17 +149,18 @@ export default class CaptureButton extends Component {
           onHandlerStateChange={this.onHandlerStateChange}
           enabled={!this.state.sliderLocked}
         >
+          {/* MAIN BUTTON VIEW */}
           <Animated.View
             style={[
               styles.buttonSize,
               buttonWidth,
+              { transform: [{ scale: this.buttonPop }] },
               { transform: [{ translateX: this.dragX }] }
             ]}
           >
             <View style={[styles.buttonSize, buttonWidth, styles.active]}>
               <Text>Hold</Text>
             </View>
-
             <Animated.View
               style={[
                 styles.buttonSize,
@@ -159,7 +171,6 @@ export default class CaptureButton extends Component {
             >
               <Text>Infinite</Text>
             </Animated.View>
-
             <Animated.View
               style={[
                 styles.buttonSize,
