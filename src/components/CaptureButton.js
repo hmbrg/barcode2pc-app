@@ -23,15 +23,61 @@ const UnlockButtton = ({ enabled, onPress, width }) => {
 };
 
 export default class CaptureButton extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    sliderLocked: false,
+    dimensions: undefined
+  };
 
-    this.state = {
-      sliderLocked: false,
-      dimensions: undefined
-    };
-  }
+  /*   
+  Setup Layout and Animators
+ */
+  setupDimensions = event => {
+    if (this.state.dimensions) return;
+    const width =
+      event.nativeEvent.layout.width - event.nativeEvent.layout.width / 3;
 
+    this.setupAnimators(width);
+    this.setState({ dimensions: { width } });
+  };
+
+  setupAnimators = btnWidth => {
+    const offset = btnWidth / 2;
+    this.translateX = new Animated.Value(0);
+    this.opacityLayer2 = new Animated.Value(0);
+    this.buttonPopper = new Animated.Value(0);
+
+    this.onGestureEvent = Animated.event(
+      [{ nativeEvent: { translationX: this.translateX } }],
+      { useNativeDriver }
+    );
+
+    this.buttonPop = this.buttonPopper.interpolate({
+      inputRange: [0, 50, 100],
+      outputRange: [1, 1.2, 1]
+    });
+
+    this.dragX = this.translateX.interpolate({
+      inputRange: [0, offset],
+      outputRange: [0, offset],
+      extrapolate: "clamp"
+    });
+
+    this.opacityLayer1 = this.translateX.interpolate({
+      inputRange: [0, offset * 0.6, offset],
+      outputRange: [0, 0, 1],
+      extrapolate: "clamp"
+    });
+
+    this.opacityLocker = this.translateX.interpolate({
+      inputRange: [0, offset * 0.5],
+      outputRange: [0, 1],
+      extrapolate: "clamp"
+    });
+  };
+
+  /*
+  Button Positioning
+  */
   setBackButton = () => {
     Animated.timing(this.translateX, {
       toValue: 0,
@@ -76,56 +122,12 @@ export default class CaptureButton extends Component {
     alert("sdfsfd");
   };
 
-  onLayout = event => {
-    if (this.state.dimensions) return;
-    const width =
-      event.nativeEvent.layout.width - event.nativeEvent.layout.width / 3;
-
-    this.setupAnimators(width);
-    this.setState({ dimensions: { width } });
-  };
-
-  setupAnimators = btnWidth => {
-    const offset = btnWidth / 2;
-    this.translateX = new Animated.Value(0);
-    this.opacityLayer2 = new Animated.Value(0);
-    this.buttonPopper = new Animated.Value(0);
-
-    this.onGestureEvent = Animated.event(
-      [{ nativeEvent: { translationX: this.translateX } }],
-      { useNativeDriver }
-    );
-
-    this.buttonPop = this.buttonPopper.interpolate({
-      inputRange: [0, 50, 100],
-      outputRange: [1, 1.2, 1]
-    });
-
-    this.dragX = this.translateX.interpolate({
-      inputRange: [0, offset],
-      outputRange: [0, offset],
-      extrapolate: "clamp"
-    });
-
-    this.opacityLayer1 = this.translateX.interpolate({
-      inputRange: [0, offset * 0.6, offset],
-      outputRange: [0, 0, 1],
-      extrapolate: "clamp"
-    });
-
-    this.opacityLocker = this.translateX.interpolate({
-      inputRange: [0, offset * 0.5],
-      outputRange: [0, 1],
-      extrapolate: "clamp"
-    });
-  };
-
   render() {
     if (this.state.dimensions) {
       var { dimensions } = this.state;
       var buttonWidth = { width: dimensions.width };
     } else {
-      return <View onLayout={this.onLayout} />;
+      return <View onLayout={this.setupDimensions} />;
     }
 
     return (
