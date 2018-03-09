@@ -7,35 +7,34 @@ export default (Toolbar = () => {
   return (
     <View style={styles.toolbar}>
       <View style={styles.tools} />
-      <View style={[styles.button, styles.center]}>
-        <CaptureButton />
+      <View style={styles.button}>
+        <CaptureButton styles={styles.button} />
       </View>
-      <View style={styles.tools} />
     </View>
   );
 });
 
 const styles = StyleSheet.create({
   toolbar: {
-    flex: 1,
+    minWidth: 295,
     flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-around",
-    alignItems: "flex-end",
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    flexGrow: 2
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 50,
+    backgroundColor: "blue"
   },
   tools: {
-    flex: 1,
-    height: 100
+    width: 50,
+    height: 50,
+
+    backgroundColor: "red"
   },
   button: {
-    flex: 2,
-    height: 100
+    width: 225,
+    height: 70,
+    marginLeft: 20,
+    zIndex: 2,
+    //overflow: "hidden",
+    backgroundColor: "yellow"
   },
-  center: {
-    alignItems: "center",
-    justifyContent: "center"
-  }
 });

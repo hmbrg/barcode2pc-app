@@ -53,15 +53,18 @@ export class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: getStatusBarHeight()
+    marginTop: getStatusBarHeight(),
   },
   upper: {
     flex: 3,
     backgroundColor: "white",
-    alignItems: "center"
+    alignItems: "center",
   },
   lower: {
-    flex: 2
+    flex: 2,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   connected: {
     fontFamily: "roboto-mono-medium",
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#C4C4C4",
     flex: 1,
     alignSelf: "stretch",
-    margin: 28,
+    margin: 20,
     marginTop: 10,
     borderRadius: 20,
     shadowColor: "black",
