@@ -16,8 +16,7 @@ const UnlockButtton = ({ enabled, onPress, width }) => {
         console.log("Acitve? " + value);
       }}
       style={[styles.buttonSize, width]}
-      enabled={enabled}
-    >
+      enabled={enabled}>
       <Text>Infinite</Text>
     </BaseButton>
   );
@@ -60,8 +59,7 @@ export default class CaptureButton extends Component {
     if (event.nativeEvent.state === State.ACTIVE) {
       console.log("dfsdfsdfs");
       Animated.spring(this.buttonPopper, {
-        toValue: 100,
-
+        toValue: 100
       }).start();
     }
 
@@ -100,7 +98,7 @@ export default class CaptureButton extends Component {
 
     this.buttonPop = this.buttonPopper.interpolate({
       inputRange: [0, 50, 100],
-      outputRange: [1, 1.2, 1],
+      outputRange: [1, 1.2, 1]
     });
 
     this.dragX = this.translateX.interpolate({
@@ -139,16 +137,14 @@ export default class CaptureButton extends Component {
             buttonWidth,
             { left: buttonWidth.width / 2 },
             { opacity: this.opacityLocker }
-          ]}
-        >
+          ]}>
           <Text>LOCK</Text>
         </Animated.View>
 
         <PanGestureHandler
           onGestureEvent={this.onGestureEvent}
           onHandlerStateChange={this.onHandlerStateChange}
-          enabled={!this.state.sliderLocked}
-        >
+          enabled={!this.state.sliderLocked}>
           {/* MAIN BUTTON VIEW */}
           <Animated.View
             style={[
@@ -156,8 +152,7 @@ export default class CaptureButton extends Component {
               buttonWidth,
               { transform: [{ scale: this.buttonPop }] },
               { transform: [{ translateX: this.dragX }] }
-            ]}
-          >
+            ]}>
             <View style={[styles.buttonSize, buttonWidth, styles.active]}>
               <Text>Hold</Text>
             </View>
@@ -167,8 +162,7 @@ export default class CaptureButton extends Component {
                 buttonWidth,
                 styles.infinite,
                 { opacity: this.opacityLayer1 }
-              ]}
-            >
+              ]}>
               <Text>Infinite</Text>
             </Animated.View>
             <Animated.View
@@ -177,8 +171,7 @@ export default class CaptureButton extends Component {
                 buttonWidth,
                 styles.infinite,
                 { opacity: this.opacityLayer2 }
-              ]}
-            >
+              ]}>
               <UnlockButtton
                 width={buttonWidth}
                 enabled={this.state.sliderLocked}
