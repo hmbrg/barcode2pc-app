@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Animated, Easing, StyleSheet, View, Text } from "react-native";
+import PropTypes from "prop-types";
 
 import { DangerZone } from "expo";
 const { GestureHandler } = DangerZone;
@@ -7,7 +8,7 @@ const { PanGestureHandler, BaseButton, State } = GestureHandler;
 
 const useNativeDriver = true;
 
-const UnlockButtton = ({ enabled, onPress }) => {
+const UnlockButtton = ({ enabled, onPress, width }) => {
   return (
     <BaseButton
       onPress={onPress}
@@ -17,8 +18,7 @@ const UnlockButtton = ({ enabled, onPress }) => {
       onActiveStateChange={value => {
         console.log("Acitve? " + value);
       }}
-      id="lokok"
-      style={styles.buttonSize}
+      style={[styles.buttonSize, width]}
       enabled={enabled}
     >
       <Text>Infinite</Text>
@@ -26,45 +26,14 @@ const UnlockButtton = ({ enabled, onPress }) => {
   );
 };
 
-export default class Button extends Component {
+export default class CaptureButton extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      sliderLocked: false
+      sliderLocked: false,
+      dimensions: undefined
     };
-
-    this.translateX = new Animated.Value(0);
-    this.opacityLayer2 = new Animated.Value(0);
-
-    this.onGestureEvent = Animated.event(
-      [
-        {
-          nativeEvent: {
-            translationX: this.translateX
-          }
-        }
-      ],
-      { useNativeDriver }
-    );
-
-    this.dragX = this.translateX.interpolate({
-      inputRange: [0, 75],
-      outputRange: [0, 75],
-      extrapolate: "clamp"
-    });
-
-    this.opacityLayer1 = this.translateX.interpolate({
-      inputRange: [0, 50, 75],
-      outputRange: [0, 0, 1],
-      extrapolate: "clamp"
-    });
-
-    this.opacityLocker = this.translateX.interpolate({
-      inputRange: [0, 60],
-      outputRange: [0, 1],
-      extrapolate: "clamp"
-    });
   }
 
   setBackButton = () => {
@@ -92,7 +61,7 @@ export default class Button extends Component {
 
   onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
-      if (event.nativeEvent.translationX >= 75) {
+      if (event.nativeEvent.translationX >= this.state.dimensions.width / 2) {
         this.lockButton();
       } else {
         this.setBackButton();
@@ -104,13 +73,60 @@ export default class Button extends Component {
     alert("sdfsfd");
   };
 
+  onLayout = event => {
+    if (this.state.dimensions) return;
+    const width =
+      event.nativeEvent.layout.width - event.nativeEvent.layout.width / 3;
+
+    this.setupAnimators(width);
+    this.setState({ dimensions: { width } });
+  };
+
+  setupAnimators = btnWidth => {
+    const offset = btnWidth / 2;
+    this.translateX = new Animated.Value(0);
+    this.opacityLayer2 = new Animated.Value(0);
+
+    this.onGestureEvent = Animated.event(
+      [{ nativeEvent: { translationX: this.translateX } }],
+      { useNativeDriver }
+    );
+
+    this.dragX = this.translateX.interpolate({
+      inputRange: [0, offset],
+      outputRange: [0, offset],
+      extrapolate: "clamp"
+    });
+
+    this.opacityLayer1 = this.translateX.interpolate({
+      inputRange: [0, offset * 0.6, offset],
+      outputRange: [0, 0, 1],
+      extrapolate: "clamp"
+    });
+
+    this.opacityLocker = this.translateX.interpolate({
+      inputRange: [0, offset * 0.5],
+      outputRange: [0, 1],
+      extrapolate: "clamp"
+    });
+  };
+
   render() {
+    if (this.state.dimensions) {
+      var { dimensions } = this.state;
+      var buttonWidth = { width: dimensions.width };
+    } else {
+      return <View onLayout={this.onLayout} />;
+    }
+
     return (
-      <View style={[styles.buttonSize]}>
+      <View>
         <Animated.View
           style={[
             styles.locker,
             styles.buttonSize,
+            buttonWidth,
+            { left: buttonWidth.width / 2 },
             { opacity: this.opacityLocker }
           ]}
         >
@@ -118,25 +134,25 @@ export default class Button extends Component {
         </Animated.View>
 
         <PanGestureHandler
-          {...this.props}
           onGestureEvent={this.onGestureEvent}
           onHandlerStateChange={this.onHandlerStateChange}
           enabled={!this.state.sliderLocked}
-          id="drag"
         >
           <Animated.View
             style={[
               styles.buttonSize,
+              buttonWidth,
               { transform: [{ translateX: this.dragX }] }
             ]}
           >
-            <Animated.View style={[styles.buttonSize, styles.active]}>
+            <View style={[styles.buttonSize, buttonWidth, styles.active]}>
               <Text>Hold</Text>
-            </Animated.View>
+            </View>
 
             <Animated.View
               style={[
                 styles.buttonSize,
+                buttonWidth,
                 styles.infinite,
                 { opacity: this.opacityLayer1 }
               ]}
@@ -147,11 +163,13 @@ export default class Button extends Component {
             <Animated.View
               style={[
                 styles.buttonSize,
+                buttonWidth,
                 styles.infinite,
                 { opacity: this.opacityLayer2 }
               ]}
             >
               <UnlockButtton
+                width={buttonWidth}
                 enabled={this.state.sliderLocked}
                 onPress={this.unlockPress}
               />
@@ -163,10 +181,14 @@ export default class Button extends Component {
   }
 }
 
+UnlockButtton.propTypes = {
+  activate: PropTypes.func,
+  deactivate: PropTypes.func
+};
+
 const styles = StyleSheet.create({
   buttonSize: {
-    width: "100%",
-    aspectRatio: 2,
+    height: "100%",
     borderRadius: 10
   },
   active: {
@@ -178,7 +200,6 @@ const styles = StyleSheet.create({
   },
   locker: {
     position: "absolute",
-    backgroundColor: "blue",
-    left: 75
+    backgroundColor: "blue"
   }
 });
