@@ -8,20 +8,6 @@ const { PanGestureHandler, BaseButton, State } = GestureHandler;
 
 const useNativeDriver = true;
 
-const UnlockButtton = ({ enabled, onPress, width }) => {
-  return (
-    <BaseButton
-      onPress={onPress}
-      onActiveStateChange={value => {
-        console.log("Acitve? " + value);
-      }}
-      style={[styles.buttonSize, width]}
-      enabled={enabled}>
-      <Text>Infinite</Text>
-    </BaseButton>
-  );
-};
-
 export default class CaptureButton extends Component {
   state = {
     sliderLocked: false,
