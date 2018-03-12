@@ -14,6 +14,8 @@ export default class CaptureButton extends Component {
     dimensions: undefined
   };
 
+  sliderLocked = false;
+
   /*   
   Setup Layout and Animators
  */
@@ -57,20 +59,19 @@ export default class CaptureButton extends Component {
   };
 
   /*
-  Button Positioning
+  Button Animations
   */
-  setBackButton = () => {
-    Animated.timing(this.translateX, {
+  btnSetBack = () => {
+    return Animated.timing(this.translateX, {
       toValue: 0,
       duration: 150,
       easing: Easing.easeIn,
       useNativeDriver
-    }).start();
+    });
   };
 
-  lockButton = () => {
-    this.setState({ sliderLocked: true });
-    Animated.parallel([
+  btnLock = () => {
+    return Animated.parallel([
       Animated.timing(this.translateX, {
         toValue: 0,
         duration: 250,
@@ -78,7 +79,34 @@ export default class CaptureButton extends Component {
         useNativeDriver
       }),
       this.opacityLayer3.setValue(1)
-    ]).start();
+    ]);
+  };
+
+  btnUnlock = () => {
+    return Animated.timing(this.opacityLayer3, {
+      toValue: 0,
+      duration: 150,
+      easing: Easing.easeIn,
+      useNativeDriver
+    });
+  };
+
+  btnPressDown = () => {
+    return Animated.timing(this.opacityLayer1, {
+      toValue: 0,
+      duration: 150,
+      easing: Easing.easeIn,
+      useNativeDriver
+    });
+  };
+
+  btnPressUp = () => {
+    return Animated.timing(this.opacityLayer1, {
+      toValue: 1,
+      duration: 150,
+      easing: Easing.easeIn,
+      useNativeDriver
+    });
   };
 
   /* 
@@ -87,11 +115,12 @@ export default class CaptureButton extends Component {
   panHandler = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       if (event.nativeEvent.translationX >= this.state.dimensions.width / 2) {
+        this.sliderLocked = true;
         this.pressStatus(true);
-        this.lockButton();
+        this.btnLock().start();
       } else {
         this.pressStatus(false);
-        this.setBackButton();
+        this.btnSetBack().start();
       }
     }
   };
@@ -110,43 +139,17 @@ export default class CaptureButton extends Component {
   pressStatus = value => {
     if (value && !this.pressActive) {
       console.log("Animating press.");
-      Animated.timing(this.opacityLayer1, {
-        toValue: 0,
-        duration: 150,
-        easing: Easing.easeIn,
-        useNativeDriver
-      }).start();
-    } else if (!value && !this.state.sliderLocked) {
-      Animated.timing(this.opacityLayer1, {
-        toValue: 1,
-        duration: 150,
-        easing: Easing.easeIn,
-        useNativeDriver
-      }).start();
+      this.btnPressDown().start();
     } else {
-      Animated.parallel([
-        Animated.timing(this.opacityLayer1, {
-          toValue: 1,
-          duration: 150,
-          easing: Easing.easeIn,
-          useNativeDriver
-        }),
-        Animated.timing(this.opacityLayer3, {
-          toValue: 0,
-          duration: 150,
-          easing: Easing.easeIn,
-          useNativeDriver
-        })
-      ]);
+      if (!value && !this.sliderLocked) {
+        this.btnPressUp().start();
+      }
+
+      Animated.parallel([this.btnPressUp(), this.btnUnlock()]);
     }
 
     this.pressActive = value ? true : false;
-    console.log(
-      "PRESS UPDATING",
-      value,
-      this.pressActive,
-      this.state.sliderLocked
-    );
+    console.log("PRESS UPDATING", value, this.pressActive, this.sliderLocked);
   };
 
   render() {
@@ -210,11 +213,6 @@ export default class CaptureButton extends Component {
     );
   }
 }
-
-UnlockButtton.propTypes = {
-  activate: PropTypes.func,
-  deactivate: PropTypes.func
-};
 
 const styles = StyleSheet.create({
   buttonSize: {
