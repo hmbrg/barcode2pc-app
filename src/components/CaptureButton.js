@@ -43,18 +43,13 @@ export default class CaptureButton extends Component {
   setupAnimators = btnWidth => {
     const offset = btnWidth / 2;
     this.translateX = new Animated.Value(0);
-    this.opacityLayer2 = new Animated.Value(0);
-    this.buttonPopper = new Animated.Value(0);
+    this.opacityLayer1 = new Animated.Value(1);
+    this.opacityLayer3 = new Animated.Value(0);
 
-    this.onGestureEvent = Animated.event(
+    this.panGesture = Animated.event(
       [{ nativeEvent: { translationX: this.translateX } }],
       { useNativeDriver }
     );
-
-    this.buttonPop = this.buttonPopper.interpolate({
-      inputRange: [0, 50, 100],
-      outputRange: [1, 1.2, 1]
-    });
 
     this.dragX = this.translateX.interpolate({
       inputRange: [0, offset],
@@ -62,7 +57,7 @@ export default class CaptureButton extends Component {
       extrapolate: "clamp"
     });
 
-    this.opacityLayer1 = this.translateX.interpolate({
+    this.opacityLayer2 = this.translateX.interpolate({
       inputRange: [0, offset * 0.6, offset],
       outputRange: [0, 0, 1],
       extrapolate: "clamp"
@@ -88,6 +83,7 @@ export default class CaptureButton extends Component {
   };
 
   lockButton = () => {
+    this.setState({ sliderLocked: true });
     Animated.parallel([
       Animated.timing(this.translateX, {
         toValue: 0,
@@ -95,31 +91,76 @@ export default class CaptureButton extends Component {
         easing: Easing.easeIn,
         useNativeDriver
       }),
-      this.opacityLayer2.setValue(1)
-    ]).start(() => {
-      this.setState({ sliderLocked: true });
-    });
+      this.opacityLayer3.setValue(1)
+    ]).start();
   };
 
-  onHandlerStateChange = event => {
-    if (event.nativeEvent.state === State.ACTIVE) {
-      console.log("dfsdfsdfs");
-      Animated.spring(this.buttonPopper, {
-        toValue: 100
-      }).start();
-    }
-
+  /* 
+  Gesture Handling
+   */
+  panHandler = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       if (event.nativeEvent.translationX >= this.state.dimensions.width / 2) {
+        this.pressStatus(true);
         this.lockButton();
       } else {
+        this.pressStatus(false);
         this.setBackButton();
       }
     }
   };
 
-  unlockPress = () => {
-    alert("sdfsfd");
+  pressHandler = event => {
+    if (
+      event.nativeEvent.state === State.ACTIVE ||
+      event.nativeEvent.state === State.CANCELLED
+    ) {
+      this.pressStatus(true);
+    } else if (event.nativeEvent.state === State.END) {
+      this.pressStatus(false);
+    }
+  };
+
+  pressStatus = value => {
+    if (value && !this.pressActive) {
+      console.log("Animating press.");
+      Animated.timing(this.opacityLayer1, {
+        toValue: 0,
+        duration: 150,
+        easing: Easing.easeIn,
+        useNativeDriver
+      }).start();
+    } else if (!value && !this.state.sliderLocked) {
+      Animated.timing(this.opacityLayer1, {
+        toValue: 1,
+        duration: 150,
+        easing: Easing.easeIn,
+        useNativeDriver
+      }).start();
+    } else {
+      Animated.parallel([
+        Animated.timing(this.opacityLayer1, {
+          toValue: 1,
+          duration: 150,
+          easing: Easing.easeIn,
+          useNativeDriver
+        }),
+        Animated.timing(this.opacityLayer3, {
+          toValue: 0,
+          duration: 150,
+          easing: Easing.easeIn,
+          useNativeDriver
+        })
+      ]);
+    }
+
+    this.pressActive = value ? true : false;
+    console.log(
+      "PRESS UPDATING",
+      value,
+      this.pressActive,
+      this.state.sliderLocked
+    );
   };
 
   render() {
@@ -130,56 +171,53 @@ export default class CaptureButton extends Component {
       return <View onLayout={this.setupDimensions} />;
     }
 
+    const basicButtonsStyle = [styles.buttonSize, buttonWidth];
+    const overflowButtonsStyle = [...basicButtonsStyle, styles.infinite];
+
     return (
       <View>
         <Animated.View
           style={[
+            ...basicButtonsStyle,
             styles.locker,
-            styles.buttonSize,
-            buttonWidth,
             { left: buttonWidth.width / 2 },
             { opacity: this.opacityLocker }
-          ]}>
-          <Text>LOCK</Text>
-        </Animated.View>
-
+          ]}
+        />
         <PanGestureHandler
-          onGestureEvent={this.onGestureEvent}
-          onHandlerStateChange={this.onHandlerStateChange}
+          onGestureEvent={this.panGesture}
+          onHandlerStateChange={this.panHandler}
           enabled={!this.state.sliderLocked}>
-          {/* MAIN BUTTON VIEW */}
           <Animated.View
             style={[
-              styles.buttonSize,
-              buttonWidth,
-              { transform: [{ scale: this.buttonPop }] },
+              ...basicButtonsStyle,
               { transform: [{ translateX: this.dragX }] }
             ]}>
-            <View style={[styles.buttonSize, buttonWidth, styles.active]}>
-              <Text>Hold</Text>
-            </View>
-            <Animated.View
-              style={[
-                styles.buttonSize,
-                buttonWidth,
-                styles.infinite,
-                { opacity: this.opacityLayer1 }
-              ]}>
-              <Text>Infinite</Text>
-            </Animated.View>
-            <Animated.View
-              style={[
-                styles.buttonSize,
-                buttonWidth,
-                styles.infinite,
-                { opacity: this.opacityLayer2 }
-              ]}>
-              <UnlockButtton
-                width={buttonWidth}
-                enabled={this.state.sliderLocked}
-                onPress={this.unlockPress}
+            <BaseButton
+              style={{ flex: 1 }}
+              onHandlerStateChange={this.pressHandler}>
+              <View style={styles.active} />
+
+              <Animated.View
+                style={[
+                  ...overflowButtonsStyle,
+                  { backgroundColor: "green" },
+                  { opacity: this.opacityLayer1 }
+                ]}
               />
-            </Animated.View>
+              <Animated.View
+                style={[
+                  ...overflowButtonsStyle,
+                  { opacity: this.opacityLayer2 }
+                ]}
+              />
+              <Animated.View
+                style={[
+                  ...overflowButtonsStyle,
+                  { opacity: this.opacityLayer3 }
+                ]}
+              />
+            </BaseButton>
           </Animated.View>
         </PanGestureHandler>
       </View>
@@ -195,9 +233,11 @@ UnlockButtton.propTypes = {
 const styles = StyleSheet.create({
   buttonSize: {
     height: "100%",
-    borderRadius: 10
+    borderRadius: 10,
+    overflow: "hidden"
   },
   active: {
+    flex: 1,
     backgroundColor: "#FF0F00"
   },
   infinite: {
