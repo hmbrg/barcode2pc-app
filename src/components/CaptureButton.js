@@ -136,6 +136,8 @@ export default class CaptureButton extends Component {
   locked = false;
   active = false;
   pressStatus = value => {
+    const oldActive = this.active;
+
     if (value === "btnPress" && this.locked && this.active) {
       this.locked = false;
       this.active = false;
@@ -173,6 +175,14 @@ export default class CaptureButton extends Component {
       Animated.parallel([this.btnPressUp(), this.btnSetBack()]).start();
     }
     console.log(value, "locked:", this.locked, "active:", this.active);
+
+    if (this.active !== oldActive) {
+      if (this.active) {
+        this.props.activate();
+      } else {
+        this.props.deactivate();
+      }
+    }
   };
 
   render() {
@@ -236,6 +246,11 @@ export default class CaptureButton extends Component {
       </View>
     );
   }
+}
+
+CaptureButton.propTypes = {
+  activate: PropTypes.func,
+  deactivate: PropTypes.func
 }
 
 const styles = StyleSheet.create({
