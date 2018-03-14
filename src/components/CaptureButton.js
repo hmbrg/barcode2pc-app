@@ -113,10 +113,8 @@ export default class CaptureButton extends Component {
   panHandler = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       if (event.nativeEvent.translationX >= this.state.dimensions.width / 2) {
-       
         this.pressStatus("panLock");
       } else {
-        
         this.pressStatus("panSetBack");
       }
     }
@@ -174,7 +172,6 @@ export default class CaptureButton extends Component {
 
       Animated.parallel([this.btnPressUp(), this.btnSetBack()]).start();
     }
-    console.log(value, "locked:", this.locked, "active:", this.active);
 
     if (this.active !== oldActive) {
       if (this.active) {
@@ -251,7 +248,7 @@ export default class CaptureButton extends Component {
 CaptureButton.propTypes = {
   activate: PropTypes.func,
   deactivate: PropTypes.func
-}
+};
 
 const styles = StyleSheet.create({
   buttonSize: {

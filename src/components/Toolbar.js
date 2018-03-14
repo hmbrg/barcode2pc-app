@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 
 import CaptureButton from "./CaptureButton";
 
-export default (Toolbar = () => {
-  return (
-    <View style={styles.toolbar}>
-      <View style={styles.tools} />
-      <View style={styles.button}>
-        <CaptureButton styles={styles.button} />
+export class Toolbar extends Component {
+  render() {
+    return (
+      <View style={styles.toolbar}>
+        <View style={styles.tools} />
+        <View style={styles.button}>
+          <CaptureButton
+            styles={styles.button}
+            activate={this.props.captureActivate}
+            deactivate={this.props.captureDeactivate}
+          />
+        </View>
       </View>
-    </View>
-  );
-});
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   toolbar: {
@@ -36,5 +43,16 @@ const styles = StyleSheet.create({
     zIndex: 2,
     //overflow: "hidden",
     backgroundColor: "yellow"
-  },
+  }
 });
+
+const mapStateToProps = (state, ownProps) => ({
+  showInfoCard: state.app.showInfoCard,
+  cardType: state.app.cardType
+});
+const mapDispatchToProps = dispatch => ({
+  captureActivate: () => dispatch.toolbar.captureActivate(),
+  captureDeactivate: () => dispatch.toolbar.captureDeactivate()
+});
+
+export default connect(null, mapDispatchToProps)(Toolbar);
