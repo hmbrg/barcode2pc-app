@@ -14,8 +14,6 @@ export default class CaptureButton extends Component {
     dimensions: undefined
   };
 
-  sliderLocked = false;
-
   /*   
   Setup Layout and Animators
  */
@@ -115,12 +113,11 @@ export default class CaptureButton extends Component {
   panHandler = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       if (event.nativeEvent.translationX >= this.state.dimensions.width / 2) {
-        this.sliderLocked = true;
-        this.pressStatus(true);
-        this.btnLock().start();
+       
+        this.pressStatus("panLock");
       } else {
-        this.pressStatus(false);
-        this.btnSetBack().start();
+        
+        this.pressStatus("panSetBack");
       }
     }
   };
@@ -130,26 +127,52 @@ export default class CaptureButton extends Component {
       event.nativeEvent.state === State.ACTIVE ||
       event.nativeEvent.state === State.CANCELLED
     ) {
-      this.pressStatus(true);
+      this.pressStatus("btnPressDown");
     } else if (event.nativeEvent.state === State.END) {
-      this.pressStatus(false);
+      this.pressStatus("btnPressUp");
     }
   };
 
+  locked = false;
+  active = false;
   pressStatus = value => {
-    if (value && !this.pressActive) {
-      console.log("Animating press.");
-      this.btnPressDown().start();
-    } else {
-      if (!value && !this.sliderLocked) {
-        this.btnPressUp().start();
-      }
+    if (value === "btnPress" && this.locked && this.active) {
+      this.locked = false;
+      this.active = false;
 
-      Animated.parallel([this.btnPressUp(), this.btnUnlock()]);
+      this.setState({ sliderLocked: false });
+      Animated.parallel([this.btnPressUp(), this.btnUnlock()]).start();
     }
 
-    this.pressActive = value ? true : false;
-    console.log("PRESS UPDATING", value, this.pressActive, this.sliderLocked);
+    if (value === "btnPressDown" && !this.locked && !this.active) {
+      this.locked = false;
+      this.active = true;
+
+      this.btnPressDown().start();
+    }
+
+    if (value === "btnPressUp" && !this.locked && this.active) {
+      this.locked = false;
+      this.active = false;
+
+      this.btnPressUp().start();
+    }
+
+    if (value === "panLock" && !this.locked) {
+      this.locked = true;
+      this.active = true;
+
+      this.setState({ sliderLocked: true });
+      this.btnLock().start();
+    }
+
+    if (value === "panSetBack" && !this.locked) {
+      this.locked = false;
+      this.active = false;
+
+      Animated.parallel([this.btnPressUp(), this.btnSetBack()]).start();
+    }
+    console.log(value, "locked:", this.locked, "active:", this.active);
   };
 
   render() {
@@ -184,7 +207,8 @@ export default class CaptureButton extends Component {
             ]}>
             <BaseButton
               style={{ flex: 1 }}
-              onHandlerStateChange={this.pressHandler}>
+              onHandlerStateChange={this.pressHandler}
+              onPress={() => this.pressStatus("btnPress")}>
               <View style={styles.active} />
 
               <Animated.View
