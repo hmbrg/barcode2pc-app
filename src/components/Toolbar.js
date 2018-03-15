@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 50,
-    backgroundColor: "blue"
   },
   tools: {
     width: 50,
@@ -41,8 +40,6 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: 20,
     zIndex: 2,
-    //overflow: "hidden",
-    backgroundColor: "yellow"
   }
 });
 

@@ -221,7 +221,7 @@ export default class CaptureButton extends Component {
               <Animated.View
                 style={[
                   ...overflowButtonsStyle,
-                  { backgroundColor: "green" },
+                  { backgroundColor: "#47FFA7" },
                   { opacity: this.opacityLayer1 }
                 ]}
               />
@@ -258,14 +258,14 @@ const styles = StyleSheet.create({
   },
   active: {
     flex: 1,
-    backgroundColor: "#FF0F00"
+    backgroundColor: "#FF4D42"
   },
   infinite: {
-    backgroundColor: "#FF7A00",
+    backgroundColor: "#FF981F",
     position: "absolute"
   },
   locker: {
     position: "absolute",
-    backgroundColor: "blue"
+    backgroundColor: "#EBEBEB"
   }
 });
