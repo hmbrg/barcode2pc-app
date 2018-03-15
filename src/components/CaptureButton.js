@@ -29,6 +29,7 @@ export default class CaptureButton extends Component {
   setupAnimators = btnWidth => {
     const offset = btnWidth / 2;
     this.translateX = new Animated.Value(0);
+    this.opacityLocker = new Animated.Value(0);
     this.opacityLayer1 = new Animated.Value(1);
     this.opacityLayer3 = new Animated.Value(0);
 
@@ -46,12 +47,6 @@ export default class CaptureButton extends Component {
     this.opacityLayer2 = this.translateX.interpolate({
       inputRange: [0, offset * 0.6, offset],
       outputRange: [0, 0, 1],
-      extrapolate: "clamp"
-    });
-
-    this.opacityLocker = this.translateX.interpolate({
-      inputRange: [0, offset * 0.5],
-      outputRange: [0, 1],
       extrapolate: "clamp"
     });
   };
@@ -107,6 +102,24 @@ export default class CaptureButton extends Component {
     });
   };
 
+  lckHide = () => {
+    return Animated.timing(this.opacityLocker, {
+      toValue: 0,
+      duration: 250,
+      easing: Easing.easeOut,
+      useNativeDriver
+    });
+  };
+
+  lckShow = () => {
+    return Animated.timing(this.opacityLocker, {
+      toValue: 1,
+      duration: 250,
+      easing: Easing.easeOut,
+      useNativeDriver
+    });
+  };
+
   /* 
   Gesture Handling
    */
@@ -149,6 +162,7 @@ export default class CaptureButton extends Component {
       this.active = true;
 
       this.btnPressDown().start();
+      this.lckShow().start();
     }
 
     if (value === "btnPressUp" && !this.locked && this.active) {
@@ -156,6 +170,7 @@ export default class CaptureButton extends Component {
       this.active = false;
 
       this.btnPressUp().start();
+      this.lckHide().start();
     }
 
     if (value === "panLock" && !this.locked) {
@@ -164,13 +179,18 @@ export default class CaptureButton extends Component {
 
       this.setState({ sliderLocked: true });
       this.btnLock().start();
+      this.lckHide().start();
     }
 
     if (value === "panSetBack" && !this.locked) {
       this.locked = false;
       this.active = false;
 
-      Animated.parallel([this.btnPressUp(), this.btnSetBack()]).start();
+      Animated.parallel([
+        this.btnPressUp(),
+        this.btnSetBack(),
+        this.lckHide()
+      ]).start();
     }
 
     if (this.active !== oldActive) {
