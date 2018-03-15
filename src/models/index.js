@@ -35,7 +35,7 @@ export const toolbar = {
       return { ...state, captureActive: false };
     },
     torch(state, payload) {
-      return { ...state };
+      return { ...state, torchActive: payload };
     }
   }
 };

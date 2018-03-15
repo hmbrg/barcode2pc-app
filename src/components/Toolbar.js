@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
+import { DangerZone } from "expo";
+const { GestureHandler } = DangerZone;
+const { BorderlessButton } = GestureHandler;
+
+import { Ionicons } from "@expo/vector-icons";
 
 import CaptureButton from "./CaptureButton";
 
@@ -8,7 +13,13 @@ export class Toolbar extends Component {
   render() {
     return (
       <View style={styles.toolbar}>
-        <View style={styles.tools} />
+        <BorderlessButton
+          activeOpacity={0.4}
+          onActiveStateChange={this.props.torch}>
+          <View style={styles.tools}>
+            <Ionicons name="md-flash" size={40} color="black" />
+          </View>
+        </BorderlessButton>
         <View style={styles.button}>
           <CaptureButton
             styles={styles.button}
@@ -27,19 +38,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingBottom: 50,
+    paddingBottom: 50
   },
   tools: {
     width: 50,
     height: 50,
-
-    backgroundColor: "red"
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F0F0F0",
+    borderRadius: 50,
+    paddingTop: 5
   },
   button: {
     width: 225,
     height: 70,
     marginLeft: 20,
-    zIndex: 2,
+    zIndex: 2
   }
 });
 
@@ -49,7 +63,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 const mapDispatchToProps = dispatch => ({
   captureActivate: () => dispatch.toolbar.captureActivate(),
-  captureDeactivate: () => dispatch.toolbar.captureDeactivate()
+  captureDeactivate: () => dispatch.toolbar.captureDeactivate(),
+  torch: value => dispatch.toolbar.torch(value)
 });
 
 export default connect(null, mapDispatchToProps)(Toolbar);
