@@ -1,6 +1,10 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "scripts": {
+    "start": "npm run debugger && exp start --lan --dev -i",
+    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
+  },
   "dependencies": {
     "@rematch/core": "^0.5.2",
     "expo": "^25.0.0",
