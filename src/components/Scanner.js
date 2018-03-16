@@ -44,7 +44,7 @@ export default class Scanner extends React.Component {
     let { hasCameraPermission } = this.state;
 
     // Only for testing (sry...)
-    hasCameraPermission = false;
+    // hasCameraPermission = false;
     if (hasCameraPermission) {
       return (
         <View style={{ flex: 1 }}>
