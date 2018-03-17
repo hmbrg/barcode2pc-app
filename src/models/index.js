@@ -1,23 +1,41 @@
 import { Linking } from "react-native";
 
+import {
+  waitforCameraPermissions,
+  checkCameraPermissions
+} from "../services/cameraPermissions";
+
 export const app = {
   state: {
     showInfoCard: false,
-    cardType: "hello"
+    cardType: "hello",
+    hasCameraPermissions: false
   },
   reducers: {
-    needCameraPermission(state) {
-      return { ...state, cardType: "cameraErr", showInfoCard: true };
+    showCard(state, payload) {
+      return { ...state, cardType: payload, showInfoCard: true };
     },
-    gotCameraPermission(state) {
-      if (state.cardType === "cameraErr")
-        return { ...state, showInfoCard: false };
-      return state;
+    hideCard(state) {
+      return { ...state, showInfoCard: false };
+    },
+    gotCameraPermissions(state) {
+      return { ...state, hasCameraPermissions: true };
     }
   },
   effects: {
     pressHello(payload, state) {
       Linking.openURL("http://google.com");
+    },
+    async initScanner(payload, state) {
+      let gotPerms = await checkCameraPermissions();
+      if (gotPerms) {
+        this.gotCameraPermissions();
+      } else {
+        this.showCard("cameraErr");
+        await waitforCameraPermissions();
+        this.hideCard();
+        this.gotCameraPermissions();
+      }
     }
   }
 };

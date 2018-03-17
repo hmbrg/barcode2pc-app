@@ -31,8 +31,8 @@ export class App extends React.Component {
           <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
           <View style={styles.scanner}>
             <Scanner
-              needCameraPermission={this.props.needCameraPermission}
-              gotCameraPermission={this.props.gotCameraPermission}
+              hasCameraPermission={this.props.hasCameraPermission}
+              init={this.props.initScanner}
             />
           </View>
         </View>
@@ -83,21 +83,20 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 50,
-    elevation: 2,
-    overflow: "hidden"
+    elevation: 2
   }
 });
 
 const mapStateToProps = (state, ownProps) => ({
   showInfoCard: state.app.showInfoCard,
-  cardType: state.app.cardType
+  cardType: state.app.cardType,
+  hasCameraPermission: state.app.hasCameraPermission
 });
 const mapDispatchToProps = dispatch => ({
   pressHello: () => dispatch.app.pressHello(),
-  needCameraPermission: () => dispatch.app.needCameraPermission(),
-  gotCameraPermission: () => dispatch.app.gotCameraPermission()
+  initScanner: () => dispatch.app.initScanner()
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
