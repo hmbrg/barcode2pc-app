@@ -14,9 +14,10 @@ export class Toolbar extends Component {
     return (
       <View style={styles.toolbar}>
         <BorderlessButton
+          style={styles.torch}
           activeOpacity={0.4}
           onActiveStateChange={this.props.torch}>
-          <View style={styles.tools}>
+          <View style={styles.torchIcon}>
             <Ionicons name="md-flash" size={40} color="black" />
           </View>
         </BorderlessButton>
@@ -34,13 +35,21 @@ export class Toolbar extends Component {
 
 const styles = StyleSheet.create({
   toolbar: {
-    minWidth: 295,
+    width: "100%",
+    maxWidth: 350,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
-    paddingBottom: 50
+    paddingBottom: 50,
+    paddingHorizontal: 20
   },
-  tools: {
+  torch: {
+    flex: 1,
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  torchIcon: {
     width: 50,
     height: 50,
     alignItems: "center",
@@ -50,9 +59,8 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   button: {
-    width: 225,
+    flex: 3,
     height: 70,
-    marginLeft: 20,
     zIndex: 2
   }
 });
