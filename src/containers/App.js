@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Font, BarCodeScanner, Permissions, Constants } from "expo";
+import { Font, BarCodeScanner, Permissions, Constants, AppLoading } from "expo";
 import { connect } from "react-redux";
 
 import Card from "../components/Card";
@@ -9,7 +9,7 @@ import Toolbar from "../components/Toolbar";
 
 export class App extends React.Component {
   state = {
-    fontLoaded: false,
+    ready: false,
     hasCameraPermission: null
   };
 
@@ -17,33 +17,33 @@ export class App extends React.Component {
     await Font.loadAsync({
       "roboto-mono-medium": require("../../assets/fonts/RobotoMono/RobotoMono-Medium.ttf")
     });
-    this.setState({ fontLoaded: true });
+    this.setState({ ready: true });
   }
 
   render() {
+    if (!this.state.ready) {
+      return <AppLoading onError={console.warn} />;
+    }
+
     return (
       <View style={styles.container}>
-        {this.state.fontLoaded ? (
-          <View style={{ flex: 1 }}>
-            <View style={styles.upper}>
-              <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
-              <View style={styles.scanner}>
-                <Scanner
-                  needCameraPermission={this.props.needCameraPermission}
-                  gotCameraPermission={this.props.gotCameraPermission}
-                />
-              </View>
-            </View>
-            <View style={styles.lower}>
-              <Toolbar />
-              <Card
-                cardType={this.props.cardType}
-                show={this.props.showInfoCard}
-                pressHello={this.props.pressHello}
+          <View style={styles.upper}>
+            <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
+            <View style={styles.scanner}>
+              <Scanner
+                needCameraPermission={this.props.needCameraPermission}
+                gotCameraPermission={this.props.gotCameraPermission}
               />
             </View>
           </View>
-        ) : null}
+          <View style={styles.lower}>
+            <Toolbar />
+            <Card
+              cardType={this.props.cardType}
+              show={this.props.showInfoCard}
+              pressHello={this.props.pressHello}
+            />
+          </View>
       </View>
     );
   }
