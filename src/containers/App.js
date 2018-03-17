@@ -27,23 +27,23 @@ export class App extends React.Component {
 
     return (
       <View style={styles.container}>
-          <View style={styles.upper}>
-            <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
-            <View style={styles.scanner}>
-              <Scanner
-                needCameraPermission={this.props.needCameraPermission}
-                gotCameraPermission={this.props.gotCameraPermission}
-              />
-            </View>
-          </View>
-          <View style={styles.lower}>
-            <Toolbar />
-            <Card
-              cardType={this.props.cardType}
-              show={this.props.showInfoCard}
-              pressHello={this.props.pressHello}
+        <View style={styles.upper}>
+          <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
+          <View style={styles.scanner}>
+            <Scanner
+              needCameraPermission={this.props.needCameraPermission}
+              gotCameraPermission={this.props.gotCameraPermission}
             />
           </View>
+        </View>
+        <View style={styles.lower}>
+          <Toolbar />
+          <Card
+            cardType={this.props.cardType}
+            show={this.props.showInfoCard}
+            pressHello={this.props.pressHello}
+          />
+        </View>
       </View>
     );
   }
@@ -52,7 +52,8 @@ export class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Constants.statusBarHeight
+    marginTop: Constants.statusBarHeight,
+    paddingHorizontal: 20
   },
   upper: {
     flex: 3,
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
   },
   lower: {
     flex: 2,
-    flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-end"
   },
@@ -71,14 +71,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: "black",
     marginTop: 6,
-    marginBottom: 0
+    marginBottom: 10
   },
   scanner: {
-    backgroundColor: "#C4C4C4",
     flex: 1,
-    alignSelf: "stretch",
-    margin: 20,
-    marginTop: 10,
+    width: "100%",
+    backgroundColor: "#C4C4C4",
     borderRadius: 20,
     shadowColor: "black",
     shadowOffset: {
@@ -87,7 +85,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 50,
-    elevation: 1,
+    elevation: 2,
     overflow: "hidden"
   }
 });
