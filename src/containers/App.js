@@ -52,18 +52,19 @@ export class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Constants.statusBarHeight,
-    paddingHorizontal: 20
+    marginTop: Constants.statusBarHeight
   },
   upper: {
     flex: 3,
     backgroundColor: "white",
-    alignItems: "center"
+    alignItems: "center",
+    paddingHorizontal: 20
   },
   lower: {
     flex: 2,
     alignItems: "center",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    paddingTop: 20
   },
   connected: {
     fontFamily: "roboto-mono-medium",

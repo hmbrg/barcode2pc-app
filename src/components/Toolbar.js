@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     paddingBottom: 50,
+    paddingHorizontal: 20
   },
   torch: {
     flex: 1,
