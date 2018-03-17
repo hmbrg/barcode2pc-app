@@ -13,7 +13,7 @@ export default class Scanner extends React.Component {
   };
 
   render() {
-    if (!this.props.hasCameraPermission) {
+    if (!this.props.hasCameraPermissions) {
       return null;
     }
 
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
 });
 
 Scanner.propTypes = {
-  hasCameraPermission: PropTypes.bool,
+  hasCameraPermissions: PropTypes.bool,
   init: PropTypes.func.isRequired,
 };

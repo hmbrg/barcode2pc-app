@@ -31,7 +31,7 @@ export class App extends React.Component {
           <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
           <View style={styles.scanner}>
             <Scanner
-              hasCameraPermission={this.props.hasCameraPermission}
+              hasCameraPermissions={this.props.hasCameraPermissions}
               init={this.props.initScanner}
             />
           </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state, ownProps) => ({
   showInfoCard: state.app.showInfoCard,
   cardType: state.app.cardType,
-  hasCameraPermission: state.app.hasCameraPermission
+  hasCameraPermissions: state.app.hasCameraPermissions
 });
 const mapDispatchToProps = dispatch => ({
   pressHello: () => dispatch.app.pressHello(),
