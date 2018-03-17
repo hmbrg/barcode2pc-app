@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
   torch: {
     flex: 1,
     height: 70,
-    alignItems: "center",
     justifyContent: "center"
   },
   torchIcon: {
