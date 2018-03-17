@@ -33,6 +33,7 @@ export class App extends React.Component {
             <Scanner
               hasCameraPermissions={this.props.hasCameraPermissions}
               init={this.props.initScanner}
+              scan={this.props.scan}
             />
           </View>
         </View>
@@ -97,7 +98,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 const mapDispatchToProps = dispatch => ({
   pressHello: () => dispatch.app.pressHello(),
-  initScanner: () => dispatch.app.initScanner()
+  initScanner: () => dispatch.app.initScanner(),
+  scan: payload => dispatch.app.scan(payload)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

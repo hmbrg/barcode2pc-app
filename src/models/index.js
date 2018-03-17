@@ -36,7 +36,8 @@ export const app = {
         this.hideCard();
         this.gotCameraPermissions();
       }
-    }
+    },
+    async scan(payload, state) {}
   }
 };
 

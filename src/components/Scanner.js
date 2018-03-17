@@ -8,8 +8,11 @@ export default class Scanner extends React.Component {
     this.props.init();
   }
 
-  _handleBarCodeRead = ({ type, data }) => {
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+  _handleBarCodeRead = event => {
+    if (this.lastScan !== event.data) {
+      this.props.scan(event);
+      this.lastScan = event.data;
+    }
   };
 
   render() {
@@ -39,4 +42,5 @@ const styles = StyleSheet.create({
 Scanner.propTypes = {
   hasCameraPermissions: PropTypes.bool,
   init: PropTypes.func.isRequired,
+  scan: PropTypes.func
 };
