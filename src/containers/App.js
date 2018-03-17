@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Font, BarCodeScanner, Permissions } from "expo";
-import { getStatusBarHeight } from "react-native-status-bar-height";
+import { Font, BarCodeScanner, Permissions, Constants } from "expo";
 import { connect } from "react-redux";
 
 import Card from "../components/Card";
@@ -36,7 +35,7 @@ export class App extends React.Component {
               </View>
             </View>
             <View style={styles.lower}>
-              <Toolbar />  
+              <Toolbar />
               <Card
                 cardType={this.props.cardType}
                 show={this.props.showInfoCard}
@@ -53,18 +52,18 @@ export class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: getStatusBarHeight(),
+    marginTop: Constants.statusBarHeight
   },
   upper: {
     flex: 3,
     backgroundColor: "white",
-    alignItems: "center",
+    alignItems: "center"
   },
   lower: {
     flex: 2,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-end"
   },
   connected: {
     fontFamily: "roboto-mono-medium",
