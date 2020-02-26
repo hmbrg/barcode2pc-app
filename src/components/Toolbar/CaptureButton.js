@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Animated, Easing, StyleSheet, View, Text } from "react-native";
 import PropTypes from "prop-types";
 
-import { DangerZone } from "expo";
-const { GestureHandler } = DangerZone;
-const { PanGestureHandler, BaseButton, State } = GestureHandler;
+//import { DangerZone } from "expo";
+//const { GestureHandler } = DangerZone;
+import { PanGestureHandler, BaseButton, State } from "react-native-gesture-handler";
 
 const useNativeDriver = true;
 

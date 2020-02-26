@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Font, BarCodeScanner, Permissions, Constants, AppLoading } from "expo";
+import { BarCodeScanner, Permissions, AppLoading } from "expo";
+import * as Font from "expo-font";
+import Constants from 'expo-constants';
 import { connect } from "react-redux";
 
-import Card from "../components/Card";
-import Scanner from "../components/Scanner";
+import Card from "../components/Card.js";
+import Scanner from "../components/Scanner.js";
 import Toolbar from "../components/Toolbar/index.js";
 
 export class App extends React.Component {

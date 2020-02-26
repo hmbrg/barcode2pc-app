@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { BarCodeScanner, Permissions } from "expo";
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import PropTypes from "prop-types";
 
 export default class Scanner extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.init();
   }
 

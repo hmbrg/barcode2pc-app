@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import { DangerZone } from "expo";
-const { GestureHandler } = DangerZone;
-const { BorderlessButton } = GestureHandler;
+// const { GestureHandler } = DangerZone;
+// const { BorderlessButton } = GestureHandler;
+import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Feather } from "@expo/vector-icons";
 
