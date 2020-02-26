@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import Card from "../components/Card";
 import Scanner from "../components/Scanner";
-import Toolbar from "../components/Toolbar";
+import Toolbar from "../components/Toolbar/index.js";
 
 export class App extends React.Component {
   state = {

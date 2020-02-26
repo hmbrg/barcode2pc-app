@@ -5,9 +5,10 @@ import { DangerZone } from "expo";
 const { GestureHandler } = DangerZone;
 const { BorderlessButton } = GestureHandler;
 
-import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 import CaptureButton from "./CaptureButton";
+import Icon from "../Icon";
 
 export class Toolbar extends Component {
   render() {
@@ -16,9 +17,12 @@ export class Toolbar extends Component {
         <BorderlessButton
           style={styles.torch}
           activeOpacity={0.4}
-          onActiveStateChange={this.props.torch}>
-          <View style={styles.torchIcon}>
-            <Ionicons name="md-flash" size={40} color="black" />
+          onPress={this.props.torch}>
+          <View style={[styles.torchIcon, {backgroundColor: this.props.torchActive ? "black" : "#F0F0F0"}]}>
+            <Icon
+              name={this.props.torchActive ? "torch-active" : "torch"}
+              size={50}
+            />
           </View>
         </BorderlessButton>
         <View style={styles.button}>
@@ -54,8 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F0F0F0",
-    borderRadius: 50,
-    paddingTop: 5
+    borderRadius: 50
   },
   button: {
     flex: 3,
@@ -65,13 +68,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state, ownProps) => ({
-  showInfoCard: state.app.showInfoCard,
-  cardType: state.app.cardType
+  torchActive: state.toolbar.torchActive
 });
 const mapDispatchToProps = dispatch => ({
   captureActivate: () => dispatch.toolbar.captureActivate(),
   captureDeactivate: () => dispatch.toolbar.captureDeactivate(),
-  torch: value => dispatch.toolbar.torch(value)
+  torch: () => dispatch.toolbar.torch()
 });
 
-export default connect(null, mapDispatchToProps)(Toolbar);
+export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
