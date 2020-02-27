@@ -9,6 +9,7 @@ import { BorderlessButton } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 
 import CaptureButton from "./CaptureButton";
+import TorchIcon from "./Torch"
 import Icon from "../Icon";
 
 export class Toolbar extends Component {
@@ -19,12 +20,7 @@ export class Toolbar extends Component {
           style={styles.torch}
           activeOpacity={0.4}
           onPress={this.props.torch}>
-          <View style={[styles.torchIcon, {backgroundColor: this.props.torchActive ? "black" : "#F0F0F0"}]}>
-            <Icon
-              name={this.props.torchActive ? "torch-active" : "torch"}
-              size={50}
-            />
-          </View>
+          <TorchIcon torchActive={this.props.torchActive} />
         </BorderlessButton>
         <View style={styles.button}>
           <CaptureButton

@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { BarCodeScanner, Permissions, AppLoading } from "expo";
+import { AppLoading } from "expo";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as Font from "expo-font";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import { connect } from "react-redux";
 
 import Card from "../components/Card.js";
@@ -28,26 +29,29 @@ export class App extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
-        <View style={styles.upper}>
-          <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
-          <View style={styles.scanner}>
-            <Scanner
-              hasCameraPermissions={this.props.hasCameraPermissions}
-              init={this.props.initScanner}
-              scan={this.props.scan}
+      <SafeAreaProvider>
+        <View style={styles.container}>
+          <View style={styles.upper}>
+            <Text style={styles.connected}>Connected to "MatthiasPC"</Text>
+            <View style={styles.scanner}>
+              <Scanner
+                hasCameraPermissions={this.props.hasCameraPermissions}
+                init={this.props.initScanner}
+                scan={this.props.scan}
+                torchActive={this.props.torchActive}
+              />
+            </View>
+          </View>
+          <View style={styles.lower}>
+            <Toolbar />
+            <Card
+              cardType={this.props.cardType}
+              show={this.props.showInfoCard}
+              pressHello={this.props.pressHello}
             />
           </View>
         </View>
-        <View style={styles.lower}>
-          <Toolbar />
-          <Card
-            cardType={this.props.cardType}
-            show={this.props.showInfoCard}
-            pressHello={this.props.pressHello}
-          />
-        </View>
-      </View>
+      </SafeAreaProvider>
     );
   }
 }
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
       height: 0
     },
     shadowOpacity: 0.5,
-    shadowRadius: 50,
+    shadowRadius: 30,
     elevation: 2
   }
 });
@@ -96,7 +100,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state, ownProps) => ({
   showInfoCard: state.app.showInfoCard,
   cardType: state.app.cardType,
-  hasCameraPermissions: state.app.hasCameraPermissions
+  hasCameraPermissions: state.app.hasCameraPermissions,
+  torchActive: state.toolbar.torchActive
 });
 const mapDispatchToProps = dispatch => ({
   pressHello: () => dispatch.app.pressHello(),

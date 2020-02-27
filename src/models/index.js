@@ -37,7 +37,9 @@ export const app = {
         this.gotCameraPermissions();
       }
     },
-    async scan(payload, state) {}
+    async scan(payload, state) {
+      //<this.showCard("code")
+    }
   }
 };
 

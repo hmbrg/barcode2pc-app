@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeScanner } from "expo-barcode-scanner";
+import { Camera } from "expo-camera";
 import PropTypes from "prop-types";
 
 export default class Scanner extends React.Component {
@@ -22,10 +23,18 @@ export default class Scanner extends React.Component {
 
     return (
       <View style={styles.wrapper}>
-        <BarCodeScanner
+        {/* <BarCodeScanner
           onBarCodeRead={this._handleBarCodeRead}
           style={StyleSheet.absoluteFill}
-        />
+        /> */}
+        <Camera
+          style={StyleSheet.absoluteFill}
+          onBarCodeScanned={this._handleBarCodeRead}
+          flashMode={
+            this.props.torchActive
+              ? Camera.Constants.FlashMode.torch
+              : Camera.Constants.FlashMode.off
+          }></Camera>
       </View>
     );
   }
@@ -42,5 +51,6 @@ const styles = StyleSheet.create({
 Scanner.propTypes = {
   hasCameraPermissions: PropTypes.bool,
   init: PropTypes.func.isRequired,
-  scan: PropTypes.func
+  scan: PropTypes.func,
+  torchActive: PropTypes.bool
 };

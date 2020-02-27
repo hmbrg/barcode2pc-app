@@ -2,7 +2,7 @@ import React from "react";
 import { Image } from "react-native";
 import PropTypes from "prop-types";
 
-export default (Icon = ({ name, size }) => {
+export default (Icon = ({ name, size, style }) => {
   let iconImg;
   switch (name) {
     case "torch":
@@ -20,7 +20,7 @@ export default (Icon = ({ name, size }) => {
     <Image
       source={iconImg}
       fadeDuration={0}
-      style={{ width: size, height: size }}
+      style={[{ width: size, height: size }, style]}
     />
   );
 });

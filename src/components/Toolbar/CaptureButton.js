@@ -4,7 +4,11 @@ import PropTypes from "prop-types";
 
 //import { DangerZone } from "expo";
 //const { GestureHandler } = DangerZone;
-import { PanGestureHandler, BaseButton, State } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  BaseButton,
+  State
+} from "react-native-gesture-handler";
 
 const useNativeDriver = true;
 
@@ -236,27 +240,39 @@ export default class CaptureButton extends Component {
               style={{ flex: 1 }}
               onHandlerStateChange={this.pressHandler}
               onPress={() => this.pressStatus("btnPress")}>
-              <View style={styles.active} />
+              {/* 
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Hold to scan</Text>
+              </View> */}
+
+              <View style={styles.active}>
+                <Text style={styles.text}>Scanning</Text>
+              </View>
 
               <Animated.View
                 style={[
                   ...overflowButtonsStyle,
                   { backgroundColor: "#47FFA7" },
                   { opacity: this.opacityLayer1 }
-                ]}
-              />
+                ]}>
+                <Text style={styles.text}>Hold to scan</Text>
+              </Animated.View>
+              
               <Animated.View
                 style={[
                   ...overflowButtonsStyle,
                   { opacity: this.opacityLayer2 }
-                ]}
-              />
+                ]}>
+                <Text style={styles.text}>Infinite mode</Text>
+              </Animated.View>
+
               <Animated.View
                 style={[
                   ...overflowButtonsStyle,
                   { opacity: this.opacityLayer3 }
-                ]}
-              />
+                ]}>
+                <Text style={styles.text}>Infinite mode</Text>
+              </Animated.View>
             </BaseButton>
           </Animated.View>
         </PanGestureHandler>
@@ -274,11 +290,15 @@ const styles = StyleSheet.create({
   buttonSize: {
     height: "100%",
     borderRadius: 10,
-    overflow: "hidden"
+    overflow: "hidden",
+    alignContent: "center",
+    justifyContent: "center"
   },
   active: {
     flex: 1,
-    backgroundColor: "#FF4D42"
+    backgroundColor: "#FF4D42",
+    alignContent: "center",
+    justifyContent: "center"
   },
   infinite: {
     backgroundColor: "#FF981F",
@@ -287,5 +307,23 @@ const styles = StyleSheet.create({
   locker: {
     position: "absolute",
     backgroundColor: "#EBEBEB"
+  },
+  textContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 2,
+    alignContent: "center",
+    justifyContent: "center"
+  },
+  text: {
+    zIndex: 2,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+    letterSpacing: 0.5,
+    textAlign: "center"
   }
 });
