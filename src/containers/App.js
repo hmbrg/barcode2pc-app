@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     flex: 3,
     backgroundColor: "white",
     alignItems: "center",
+    justifyContent: "space-around",
     paddingHorizontal: 20
   },
   lower: {
@@ -82,8 +83,9 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   scanner: {
-    flex: 1,
+    //flex: 1,
     width: "100%",
+    aspectRatio: 1,
     backgroundColor: "#C4C4C4",
     borderRadius: 20,
     shadowColor: "black",

@@ -9,7 +9,7 @@ Use
 ```bash
 npm start
 ```
-to run the app on your preffered device or simulator.
+to run the app on your preferred device or simulator.
 
 ## Architecture
 ### Libraries and Frameworks used
